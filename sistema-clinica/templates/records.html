@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Prontuários</title>
+</head>
+<body>
+    <ul>
+        {% for id, prontuario in prontuarios.items() %}
+            <li>
+                <strong>{{ prontuario.paciente }}</strong> ({{ prontuario.data }}) - 
+                {{ prontuario.diagnostico }}, {{ prontuario.doctor }}
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
