@@ -1,15 +1,17 @@
 version: "3.8"
 services:
   nginx:
-    build: ../sistema-seguranca
+    build: .
     ports:
       - "80:80"
-      - "5000:5000" 
+      - "5001:5000" 
     networks:
       - clinica-net
+    volumes:
+      - ./data/protected_routes.conf:/etc/nginx/protected_routes.conf
 
   sistema:
-    build: ../sistema-clinica
+    build: ../sistema-clinica/
     expose:
       - "5000"
     networks:
