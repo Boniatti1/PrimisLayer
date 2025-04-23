@@ -4,6 +4,7 @@ services:
     build: ../sistema-seguranca
     ports:
       - "80:80"
+      - "5000:5000" 
     networks:
       - clinica-net
 
