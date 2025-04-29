@@ -9,6 +9,9 @@ services:
       - clinica-net
     volumes:
       - ./data/protected_routes.conf:/etc/nginx/protected_routes.conf
+      - ./data/nginx:/var/log/nginx
+    cap_add:
+      - NET_ADMIN
 
   sistema:
     build: ../sistema-clinica/

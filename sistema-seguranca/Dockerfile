@@ -1,14 +1,16 @@
 FROM nginx:alpine
 
-RUN apk add python3 py3-pip supervisor
+RUN apk add python3 py3-pip supervisor iptables fail2ban
 
 COPY dashboard/ /dashboard/
 COPY ./requirements.txt requirements.txt
 COPY data/nginx.conf /etc/nginx/nginx.conf
 COPY data/protected_routes.conf /etc/nginx/protected_routes.conf
+COPY data/fail2ban/filter.d/* /etc/fail2ban/filter.d/
+COPY data/fail2ban/jail.local /etc/fail2ban/jail.local
 
 # Nota: PEP 668
-RUN python3 -m venv /venv && \
+RUN python3 -m venv /venv && \  
     /venv/bin/pip install -r requirements.txt
 ENV PATH="/venv/bin:$PATH"
 

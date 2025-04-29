@@ -1,0 +1,21 @@
+[DEFAULT]
+
+ignoreip = 127.0.0.1 172.23.0.1
+
+banaction = iptables-multiport
+backend = auto
+
+[nginx-4xx]
+enabled = true
+port    = http,https
+filter  = nginx-4xx
+logpath = /var/log/nginx/*access.log
+maxretry = 10
+bantime  = 600
+findtime = 60
+
+[sshd]
+enabled = false
+
+[sshd-ddos]
+enabled = false
