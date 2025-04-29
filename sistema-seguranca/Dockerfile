@@ -1,6 +1,6 @@
 FROM nginx:alpine
 
-RUN apk add python3 py3-pip
+RUN apk add python3 py3-pip supervisor
 
 COPY dashboard/ /dashboard/
 COPY ./requirements.txt requirements.txt
@@ -12,6 +12,8 @@ RUN python3 -m venv /venv && \
     /venv/bin/pip install -r requirements.txt
 ENV PATH="/venv/bin:$PATH"
 
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
 EXPOSE 80 5000
 
-ENTRYPOINT ["sh", "-c", "nginx && python /dashboard/app.py"]
+CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
