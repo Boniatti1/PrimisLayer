@@ -13,6 +13,9 @@ logpath = /var/log/nginx/*access.log
 maxretry = 10
 bantime  = 600
 findtime = 60
+action = %(action_)s
+        telegram-alert
+
 
 [sshd]
 enabled = false
