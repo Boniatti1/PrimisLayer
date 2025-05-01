@@ -4,6 +4,7 @@ services:
     build: .
     ports:
       - "80:80"
+      - "443:443"
       - "5001:5000" 
     networks:
       - clinica-net

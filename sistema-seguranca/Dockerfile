@@ -6,6 +6,9 @@ COPY dashboard/ /dashboard/
 COPY ./requirements.txt requirements.txt
 COPY data/nginx.conf /etc/nginx/nginx.conf
 COPY data/protected_routes.conf /etc/nginx/protected_routes.conf
+COPY data/nginx/certs/ /etc/nginx/ssl/
+RUN chmod 600 /etc/nginx/ssl/*.key && \
+    chmod 644 /etc/nginx/ssl/*.crt
 
 COPY data/fail2ban/filter.d/* /etc/fail2ban/filter.d/
 COPY data/fail2ban/jail.local /etc/fail2ban/jail.local
@@ -19,6 +22,6 @@ ENV PATH="/venv/bin:$PATH"
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-EXPOSE 80 5000
+EXPOSE 80 443 5000
 
 CMD ["supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
