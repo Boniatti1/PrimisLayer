@@ -1,6 +1,6 @@
-FROM nginx:alpine
+FROM alpine
 
-RUN apk add python3 py3-pip supervisor iptables fail2ban
+RUN apk add python3 py3-pip supervisor iptables fail2ban nginx-mod-http-naxsi
 
 COPY dashboard/ /dashboard/
 COPY ./requirements.txt requirements.txt
@@ -14,6 +14,8 @@ COPY data/fail2ban/filter.d/* /etc/fail2ban/filter.d/
 COPY data/fail2ban/jail.local /etc/fail2ban/jail.local
 COPY data/fail2ban/action.d/telegram-alert.conf /etc/fail2ban/action.d/telegram-alert.conf
 COPY scripts/* /etc/fail2ban/
+
+COPY data/naxsi/naxsi.rules /etc/nginx/naxsi.rules
 
 # Nota: PEP 668
 RUN python3 -m venv /venv && \  
