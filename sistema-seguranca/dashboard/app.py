@@ -1,6 +1,7 @@
 from flask import Flask, render_template
 from pathlib import Path
 import re
+from utils import get_fail2ban_logs
 
 app = Flask(__name__)
 
@@ -68,13 +69,16 @@ def dashboard():
     
     server_error_logs = [parse_nginx_error(line) for line in tail_log_file(NGINX_ERROR_PATH)]
     
+    fail2ban_logs = get_fail2ban_logs()
+    
     return render_template(
         'dashboard.html',
         normal_access=normal_access_logs,
         normal_errors=normal_error_logs,
         protected_access=protected_access_logs,
         protected_errors=protected_error_logs,
-        server_errors=server_error_logs
+        server_errors=server_error_logs,
+        fail2ban_logs=fail2ban_logs
     )
 
 if __name__ == '__main__':
