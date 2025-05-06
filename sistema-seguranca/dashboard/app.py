@@ -1,13 +1,81 @@
-from flask import Flask, request, jsonify
+from flask import Flask, render_template
+from pathlib import Path
+import re
 
 app = Flask(__name__)
-ROUTES_PATH = "/etc/nginx/protected_routes.conf"
 
-@app.route("/")
-def index():
-    with open(ROUTES_PATH) as f:
-        rules = f.read()
-    return jsonify(rules)
+NGINX_LOGS_PATH = Path(__file__).parent.parent / "data" / "nginx"
+NGINX_ERROR_PATH = NGINX_LOGS_PATH / "error.log"      
+NGINX_NORMAL_ACCESS = NGINX_LOGS_PATH / "normal_access.log" 
+NGINX_NORMAL_ERROR = NGINX_LOGS_PATH / "normal_error.log"   
+NGINX_PROTECTED_ACCESS = NGINX_LOGS_PATH / "protected_access.log" 
+NGINX_PROTECTED_ERROR = NGINX_LOGS_PATH / "protected_error.log" 
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+def tail_log_file(filepath, lines=100):
+    try:
+        with open(filepath, 'r') as f:
+            return f.readlines()[-lines:]
+    except FileNotFoundError:
+        return []
+
+def parse_nginx_access(line):
+    pattern = r'^(\d+\.\d+\.\d+\.\d+) .* \[(.*?)\] "(.*?) (.*?) HTTP\/.*?" (\d+) \d+ ".*?" "(.*?)"$'
+    match = re.match(pattern, line)
+    if not match:
+        return None
+    
+    return {
+        'ip': match.group(1),
+        'date': match.group(2),
+        'method': match.group(3),
+        'url': match.group(4),
+        'status': int(match.group(5)),
+        'user_agent': match.group(6),
+        'is_error': int(match.group(5)) >= 400
+    }
+
+def parse_nginx_error(line):
+    pattern = r'^(\d{4}\/\d{2}\/\d{2} \d{2}:\d{2}:\d{2}) \[(\w+)\] (\d+#\d+): (.*)$'
+    match = re.match(pattern, line)
+    if not match:
+        return None
+    
+    log_type = match.group(2).lower()
+    badge_class = {
+        'error': 'danger',
+        'warn': 'warning',
+        'notice': 'info',
+        'emerg': 'purple'
+    }.get(log_type, 'secondary')
+    
+    return {
+        'date': match.group(1),
+        'log_type': log_type,
+        'pid': match.group(3),
+        'message': match.group(4),
+        'badge_class': badge_class
+    }
+
+@app.route('/')
+def dashboard():
+    normal_access_logs = [parse_nginx_access(line) for line in tail_log_file(NGINX_NORMAL_ACCESS) ]
+    
+    normal_error_logs = [parse_nginx_error(line) for line in tail_log_file(NGINX_NORMAL_ERROR)]  
+    
+    protected_access_logs = [parse_nginx_access(line) for line in tail_log_file(NGINX_PROTECTED_ACCESS)]
+    
+    protected_error_logs = [parse_nginx_error(line) for line in tail_log_file(NGINX_PROTECTED_ERROR)]
+    
+    server_error_logs = [parse_nginx_error(line) for line in tail_log_file(NGINX_ERROR_PATH)]
+    
+    return render_template(
+        'dashboard.html',
+        normal_access=normal_access_logs,
+        normal_errors=normal_error_logs,
+        protected_access=protected_access_logs,
+        protected_errors=protected_error_logs,
+        server_errors=server_error_logs
+    )
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000, debug=True)
