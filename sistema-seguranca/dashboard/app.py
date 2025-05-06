@@ -1,7 +1,7 @@
 from flask import Flask, render_template
 from pathlib import Path
 import re
-from utils import get_fail2ban_logs
+from fail2ban_utils import get_fail2ban_logs
 
 app = Flask(__name__)
 
