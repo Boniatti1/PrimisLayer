@@ -11,6 +11,7 @@ services:
     volumes:
       - ./data/protected_routes.conf:/etc/nginx/protected_routes.conf
       - ./data/nginx:/var/log/nginx
+      - ./data/fail2ban/logs/fail2ban-actions.log:/var/log/fail2ban-actions.log
     cap_add:
       - NET_ADMIN
 

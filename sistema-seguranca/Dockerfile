@@ -12,7 +12,7 @@ RUN chmod 600 /etc/nginx/ssl/*.key && \
 
 COPY data/fail2ban/filter.d/* /etc/fail2ban/filter.d/
 COPY data/fail2ban/jail.local /etc/fail2ban/jail.local
-COPY data/fail2ban/action.d/telegram-alert.conf /etc/fail2ban/action.d/telegram-alert.conf
+COPY data/fail2ban/action.d/* /etc/fail2ban/action.d/
 COPY scripts/* /etc/fail2ban/
 
 COPY data/naxsi/naxsi.rules /etc/nginx/naxsi.rules

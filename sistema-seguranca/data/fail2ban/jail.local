@@ -15,7 +15,7 @@ bantime  = 600
 findtime = 60
 action = %(action_)s
         telegram-alert
-
+        logger[msg="Muitos acessos com erro 4xx"]
 
 [sshd]
 enabled = false
