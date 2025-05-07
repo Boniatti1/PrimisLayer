@@ -1,7 +1,8 @@
 from datetime import datetime
 from pathlib import Path
 
-FAIL2BAN_LOG_PATH = Path(__file__).parent.parent / "data" / "fail2ban" / "logs" / "fail2ban-actions.log"
+# FAIL2BAN_LOG_PATH = Path(__file__).parent.parent / "data" / "fail2ban" / "logs" / "fail2ban-actions.log"
+FAIL2BAN_LOG_PATH = "/var/log/fail2ban-actions.log"
 
 def parse_fail2ban_log(line):
     parts = line.strip().split(" - ")
