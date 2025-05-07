@@ -1,11 +1,13 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, jsonify, request
 from pathlib import Path
 import re
 from fail2ban_utils import get_fail2ban_logs
+from nginx_utils import delete_location, add_location, list_locations
 
 app = Flask(__name__)
 
-NGINX_LOGS_PATH = Path(__file__).parent.parent / "data" / "nginx"
+# NGINX_LOGS_PATH = Path(__file__).parent.parent / "data" / "nginx"
+NGINX_LOGS_PATH = Path("/var/log/nginx")
 NGINX_ERROR_PATH = NGINX_LOGS_PATH / "error.log"      
 NGINX_NORMAL_ACCESS = NGINX_LOGS_PATH / "normal_access.log" 
 NGINX_NORMAL_ERROR = NGINX_LOGS_PATH / "normal_error.log"   
@@ -80,6 +82,39 @@ def dashboard():
         server_errors=server_error_logs,
         fail2ban_logs=fail2ban_logs
     )
+
+@app.route("/locations", methods=["GET"])
+def get_locations():
+    return jsonify(list_locations())
+
+@app.route("/locations", methods=["POST"])
+def add_route():
+    data = request.get_json()
+    path = data.get("path")
+    if not path or not path.startswith("/"):
+        return jsonify({"error": "Path inválido"}), 400
+
+    add_location(path)
+
+    return jsonify({"message": f"Path {path} adicionado"}), 201
+
+@app.route("/locations", methods=["DELETE"])
+def delete_route():
+    data = request.get_json()
+    path = data.get("path")
+    if not path or not path.startswith("/"):
+        return jsonify({"error": "Path inválido"}), 400
+    
+    delete_location(path)
+
+    return jsonify({"message": f"Path {path} removido"}), 200
+
+@app.route("/rotas", methods=["GET", "POST"])
+def manage_routes():
+    routes = list_locations()
+    
+    return render_template("config.html", routes=routes)
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
