@@ -13,6 +13,8 @@ services:
       - ./data/protected_routes.json:/etc/nginx/protected_routes.json
       - ./data/nginx:/var/log/nginx
       - ./data/fail2ban/logs/fail2ban-actions.log:/var/log/fail2ban-actions.log
+      - ./data/ssl:/etc/ssl/server
+      - ./data/certs.log:/var/log/certs.log
     cap_add:
       - NET_ADMIN
 
