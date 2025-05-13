@@ -4,8 +4,7 @@ RUN apk add python3 py3-pip supervisor iptables fail2ban nginx-mod-http-naxsi op
 
 COPY dashboard/ /dashboard/
 COPY ./requirements.txt requirements.txt
-COPY data/nginx.conf /etc/nginx/nginx.conf
-COPY data/protected_routes.conf /etc/nginx/protected_routes.conf
+COPY data/nginx/nginx.conf /etc/nginx/nginx.conf
 
 COPY data/fail2ban/filter.d/* /etc/fail2ban/filter.d/
 COPY data/fail2ban/jail.local /etc/fail2ban/jail.local

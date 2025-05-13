@@ -9,12 +9,15 @@ services:
     networks:
       - clinica-net
     volumes:
-      - ./data/protected_routes.conf:/etc/nginx/protected_routes.conf
-      - ./data/protected_routes.json:/etc/nginx/protected_routes.json
-      - ./data/nginx:/var/log/nginx
-      - ./data/fail2ban/logs/fail2ban-actions.log:/var/log/fail2ban-actions.log
+      # Nginx
+      - ./data/nginx/protected_routes.conf:/etc/nginx/protected_routes.conf
+      - ./data/nginx/protected_routes.json:/etc/nginx/protected_routes.json
+      # Logs
+      - ./data/logs/nginx:/var/log/nginx
+      - ./data/logs/fail2ban/fail2ban-actions.log:/var/log/fail2ban-actions.log
+      - ./data/logs/certs.log:/var/log/certs.log
+      # SSL
       - ./data/ssl:/etc/ssl/server
-      - ./data/certs.log:/var/log/certs.log
     cap_add:
       - NET_ADMIN
 

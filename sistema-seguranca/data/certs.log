@@ -1,0 +1,49 @@
+Certificado 4 revogado: CompletedProcess(args=['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/4/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\nAdding Entry with serial number 4C2A05A76C6CC73F74F7FE4DCC700DE6A19F1920 to DB for /CN=4/O=Clinica VidaMais/L=Palmital/ST=PR/C=BR\nRevoking Certificate 4C2A05A76C6CC73F74F7FE4DCC700DE6A19F1920.\nDatabase updated\n')
+CRL atualizado para certificado 4: CompletedProcess(args=['openssl', 'ca', '-gencrl', '-out', '/etc/ssl/server/ca/crl.pem', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\n')
+Certificado 5 revogado: CompletedProcess(args=['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/5/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\nAdding Entry with serial number 4C2A05A76C6CC73F74F7FE4DCC700DE6A19F1921 to DB for /CN=5/O=Clinica VidaMais/L=Palmital/ST=PR/C=BR\nRevoking Certificate 4C2A05A76C6CC73F74F7FE4DCC700DE6A19F1921.\nDatabase updated\n')
+CRL atualizado para certificado 5: CompletedProcess(args=['openssl', 'ca', '-gencrl', '-out', '/etc/ssl/server/ca/crl.pem', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\n')
+Arquivo /etc/ssl/server/clients/clients.json não encontrado. Criando novo
+Arquivo /etc/ssl/server/clients/clients.json não encontrado. Criando novo
+Erro inesperado ao adicionar oi: log() missing 1 required positional argument: 'msg'
+Erro inesperado ao adicionar oi: log() missing 1 required positional argument: 'msg'
+Chave privada gerada para oi: /etc/ssl/server/clients/oi/client.key
+CSR gerado para oi: Sucesso
+Certificado assinado para oi: Sucesso
+Arquivo PKCS#12 gerado para oi: /etc/ssl/server/clients/oi/client.p12
+Cliente oi adicionado com sucesso!
+Certificado oi revogado: CompletedProcess(args=['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/oi/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\nAdding Entry with serial number 37143315CEEBD440F047396B9C52F3378C1E3254 to DB for /CN=oi/O=Clinica VidaMais/L=Palmital/ST=PR/C=BR\nRevoking Certificate 37143315CEEBD440F047396B9C52F3378C1E3254.\nDatabase updated\n')
+CRL atualizado para certificado oi: CompletedProcess(args=['openssl', 'ca', '-gencrl', '-out', '/etc/ssl/server/ca/crl.pem', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\n')
+Erro ao remover certificado para oi: None
+Erro inesperado ao remover oi: Command '['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/oi/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation']' returned non-zero exit status 1.
+Chave privada gerada para 1: /etc/ssl/server/clients/1/client.key
+CSR gerado para 1: Sucesso
+Certificado assinado para 1: Sucesso
+Arquivo PKCS#12 gerado para 1: /etc/ssl/server/clients/1/client.p12
+Cliente 1 adicionado com sucesso!
+Certificado 1 revogado: CompletedProcess(args=['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/1/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\nAdding Entry with serial number 37143315CEEBD440F047396B9C52F3378C1E3255 to DB for /CN=1/O=Clinica VidaMais/L=Palmital/ST=PR/C=BR\nRevoking Certificate 37143315CEEBD440F047396B9C52F3378C1E3255.\nDatabase updated\n')
+CRL atualizado para certificado 1: CompletedProcess(args=['openssl', 'ca', '-gencrl', '-out', '/etc/ssl/server/ca/crl.pem', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\n')
+Erro inesperado ao remover oi: Command '['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/oi/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation']' returned non-zero exit status 1.
+Erro inesperado ao remover oi: Command '['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/oi/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation']' returned non-zero exit status 1.
+Chave privada gerada para teste: /etc/ssl/server/clients/teste/client.key
+CSR gerado para teste: Sucesso
+Certificado assinado para teste: Sucesso
+Arquivo PKCS#12 gerado para teste: /etc/ssl/server/clients/teste/client.p12
+Cliente teste adicionado com sucesso!
+Erro inesperado ao remover oi: Command '['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/oi/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation']' returned non-zero exit status 1.
+Certificado teste revogado: CompletedProcess(args=['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/teste/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\nAdding Entry with serial number 37143315CEEBD440F047396B9C52F3378C1E3256 to DB for /CN=teste/O=Clinica VidaMais/L=Palmital/ST=PR/C=BR\nRevoking Certificate 37143315CEEBD440F047396B9C52F3378C1E3256.\nDatabase updated\n')
+CRL atualizado para certificado teste: CompletedProcess(args=['openssl', 'ca', '-gencrl', '-out', '/etc/ssl/server/ca/crl.pem', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\n')
+Arquivo /etc/ssl/server/clients/clients.json não encontrado. Criando novo
+Chave privada gerada para a: /etc/ssl/server/clients/a/client.key
+CSR gerado para a: Sucesso
+Certificado assinado para a: Sucesso
+Arquivo PKCS#12 gerado para a: /etc/ssl/server/clients/a/client.p12
+Cliente a adicionado com sucesso!
+Chave privada gerada para leozinho: /etc/ssl/server/clients/leozinho/client.key
+CSR gerado para leozinho: Sucesso
+Certificado assinado para leozinho: Sucesso
+Arquivo PKCS#12 gerado para leozinho: /etc/ssl/server/clients/leozinho/client.p12
+Cliente leozinho adicionado com sucesso!
+Certificado leozinho revogado: CompletedProcess(args=['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/leozinho/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\nAdding Entry with serial number 37143315CEEBD440F047396B9C52F3378C1E3258 to DB for /CN=leozinho/O=Clinica VidaMais/L=Palmital/ST=PR/C=BR\nRevoking Certificate 37143315CEEBD440F047396B9C52F3378C1E3258.\nDatabase updated\n')
+CRL atualizado para certificado leozinho: CompletedProcess(args=['openssl', 'ca', '-gencrl', '-out', '/etc/ssl/server/ca/crl.pem', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\n')
+Certificado a revogado: CompletedProcess(args=['openssl', 'ca', '-revoke', '/etc/ssl/server/clients/a/client.crt', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt', '-crl_reason', 'cessationOfOperation'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\nAdding Entry with serial number 37143315CEEBD440F047396B9C52F3378C1E3257 to DB for /CN=a/O=Clinica VidaMais/L=Palmital/ST=PR/C=BR\nRevoking Certificate 37143315CEEBD440F047396B9C52F3378C1E3257.\nDatabase updated\n')
+CRL atualizado para certificado a: CompletedProcess(args=['openssl', 'ca', '-gencrl', '-out', '/etc/ssl/server/ca/crl.pem', '-config', '/etc/ssl/server/openssl.cnf', '-keyfile', '/etc/ssl/server/ca/ca.key', '-cert', '/etc/ssl/server/ca/ca.crt'], returncode=0, stdout='', stderr='Using configuration from /etc/ssl/server/openssl.cnf\n')
