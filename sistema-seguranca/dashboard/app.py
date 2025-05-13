@@ -1,8 +1,9 @@
-from flask import Flask, render_template, jsonify, request
+from flask import Flask, render_template, jsonify, request, abort, send_file
 from pathlib import Path
 import re
 from fail2ban_utils import get_fail2ban_logs
 from nginx_utils import delete_location, add_location, list_locations
+from certs_utils import delete_client_cert, add_client_cert, get_client_p12_path, list_client_certs
 
 app = Flask(__name__)
 
@@ -110,11 +111,37 @@ def delete_route():
     return jsonify({"message": f"Path {path} removido"}), 200
 
 @app.route("/rotas", methods=["GET", "POST"])
-def manage_routes():
+def manage_config():
     routes = list_locations()
+    certs = list_client_certs()
     
-    return render_template("config.html", routes=routes)
+    return render_template("config.html", routes=routes, certs=certs)
 
+@app.route("/certificados/remover/<string:name>")
+def revoke_cert(name):
+    r = delete_client_cert(name)
+    return str(r), 200
+    
+@app.route("/adicionar/<string:name>")
+def add_cert(name):
+    r = add_client_cert(name)
+    return str(r), 200
+
+@app.route('/certificados/download/<string:name>')
+def download_p12(name):
+    try:
+        p12_path = get_client_p12_path(name)
+        return send_file(
+            str(p12_path),
+            as_attachment=True,
+            download_name=f"{name}.p12",
+            mimetype="application/x-pkcs12"
+        )
+    except FileNotFoundError as e:
+        abort(404, description=str(e)) 
+    except Exception as e:
+        abort(500, description=f"Erro interno: {str(e)}")
+    
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
