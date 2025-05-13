@@ -3,3 +3,5 @@ annotations
 ca
 clients
 server
+.env
+logs
