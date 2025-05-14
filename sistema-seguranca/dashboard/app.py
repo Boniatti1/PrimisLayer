@@ -7,8 +7,13 @@ from utils.certs_utils import (
     get_client_p12_path,
     list_client_certs,
 )
+import subprocess
 
 app = Flask(__name__)
+
+def telegram_alert(ip, action, level, msg=""):
+    subprocess.run(["python", "/etc/scripts/telegram_alert.py", str(ip), str(action), str(level), str(msg)], check=True)
+    
 
 # Rotas principais
 
@@ -45,6 +50,7 @@ def add_route():
         return jsonify({"error": "Path inválido"}), 400
 
     add_location(path)
+    telegram_alert(request.remote_addr, "Nova rota protegida adicionada", "Baixa")
 
     return jsonify({"message": f"Path {path} adicionado"}), 201
 
@@ -57,6 +63,7 @@ def delete_route():
         return jsonify({"error": "Path inválido"}), 400
 
     delete_location(path)
+    telegram_alert(request.remote_addr, "Rota protegida excluída", "Alta")
 
     return jsonify({"message": f"Path {path} removido"}), 200
 
@@ -67,12 +74,14 @@ def delete_route():
 @app.route("/certificados/remover/<string:name>")
 def revoke_cert(name):
     r = delete_client_cert(name)
+    telegram_alert(request.remote_addr, "Revogação de certificado", "Baixa")
     return str(r), 200
 
 
 @app.route("/certificados/adicionar/<string:name>")
 def add_cert(name):
     r = add_client_cert(name)
+    telegram_alert(request.remote_addr, "Criação de novo certificado", "Média")
     return str(r), 200
 
 
@@ -80,12 +89,13 @@ def add_cert(name):
 def download_p12(name):
     try:
         p12_path = get_client_p12_path(name)
+        telegram_alert(request.remote_addr, "Download de um certificado", "Média")
         return send_file(
             str(p12_path),
             as_attachment=True,
             download_name=f"{name}.p12",
             mimetype="application/x-pkcs12",
-        )
+        )   
     except FileNotFoundError as e:
         abort(404, description=str(e))
     except Exception as e:
