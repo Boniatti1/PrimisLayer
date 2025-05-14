@@ -87,8 +87,8 @@ def add_location(path):
 
 def tail_log_file(filepath, lines=100):
     with open(filepath, "r") as f:
-        history = f.readlines()[::-1]
-        return history[-lines:]
+        history = f.readlines()[-lines:]
+        return history[::-1]
 
 
 def parse_nginx_access(line):
@@ -150,8 +150,8 @@ def get_dict_logs():
 
     return {
         "normal_access": normal_access_logs,
-        "normal_error": normal_error_logs,
+        "normal_errors": normal_error_logs,
         "protected_access": protected_access_logs,
         "protected_error": protected_error_logs,
-        "server_error": server_error_logs,
+        "server_errors": server_error_logs,
     }

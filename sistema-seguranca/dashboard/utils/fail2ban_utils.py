@@ -18,7 +18,7 @@ def parse_fail2ban_log(line):
 
 def get_fail2ban_logs(lines=100):
     with open(FAIL2BAN_LOG_PATH, "r") as f:
-        logs = f.readlines()[-lines:]
+        logs = f.readlines()[-lines:][::-1]
 
     formatted_logs = []
     for line in logs:
