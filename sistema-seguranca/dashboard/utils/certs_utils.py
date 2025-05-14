@@ -1,7 +1,9 @@
 import json
 import subprocess
 from pathlib import Path
-from flask import abort, send_file
+from flask import abort
+from datetime import datetime
+
 
 OPENSSL_PATH = Path("/etc/ssl/server/openssl.cnf")
 CLIENTS_PATH = Path("/etc/ssl/server/clients")
@@ -12,7 +14,13 @@ CERTS_LOGPATH = "/var/log/certs.log"
 
 def log(path, msg):
     with open(path, "a") as f:
-        f.write(str(msg) + "\n")
+        f.write(str(datetime.now().strftime("%d/%m/%Y %H:%M:%S")) + " " + str(msg) + "\n")
+
+   
+def get_certs_logs(lines=100):
+    with open(CERTS_LOGPATH, "r") as f:
+        logs = f.readlines()[-lines:]
+    return logs[::-1]
 
 
 def list_client_certs():
