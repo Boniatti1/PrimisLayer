@@ -9,19 +9,22 @@ load_dotenv()
 TOKEN = getenv("TOKEN")
 CHAT_ID = getenv("CHAT_ID")
 
-LEVEL = {
-    "nginx-4xx": "Média",
-}
-
 ip = sys.argv[1]
 action = sys.argv[2]
+level = sys.argv[3] if len(sys.argv) >= 4 else "Média"
+message = sys.argv[4] if len(sys.argv) == 5 else None
 
 msg = f"""
 **ALERTA DE SEGURANÇA**
 • *IP*: `{ip}`
 • *Ação*: `{action}`
+• *Nível de Segurança*: `{level}`
 • *Data*: {datetime.now().strftime("%d/%m/%Y %H:%M:%S")}
 """
+
+if message:
+    msg += f"""• *Mensagem*: `{message}`"""
+
 
 url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
 payload = {
