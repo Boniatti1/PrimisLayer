@@ -1,10 +1,11 @@
 FROM alpine
 
-RUN apk add python3 py3-pip supervisor iptables fail2ban nginx-mod-http-naxsi openssl
+RUN apk add python3 py3-pip supervisor iptables fail2ban nginx-mod-http-naxsi openssl tzdata
 
 COPY dashboard/ /dashboard/
 COPY ./requirements.txt requirements.txt
 COPY data/nginx/nginx.conf /etc/nginx/nginx.conf
+ENV TZ=America/Sao_Paulo
 
 COPY data/fail2ban/filter.d/* /etc/fail2ban/filter.d/
 COPY data/fail2ban/jail.local /etc/fail2ban/jail.local
