@@ -164,7 +164,7 @@
         return;
       }
 
-      const res = await fetch("/locations", {
+      const res = await fetch("/rotas-protegidas", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ path })
@@ -181,7 +181,7 @@
       const confirmed = confirm(`Deseja remover a rota ${path}?`);
       if (!confirmed) return;
 
-      const res = await fetch("/locations", {
+      const res = await fetch("/rotas-protegidas", {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ path })
@@ -205,7 +205,7 @@
         return;
       }
 
-      const res = await fetch(`/adicionar/${encodeURIComponent(name)}`);
+      const res = await fetch(`/certificados/adicionar/${encodeURIComponent(name)}`);
 
       if (res.ok) {
         location.reload();
