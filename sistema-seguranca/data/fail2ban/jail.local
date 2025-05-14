@@ -14,7 +14,7 @@ maxretry = 10
 bantime  = 600
 findtime = 60
 action = %(action_)s
-        telegram-alert
+        telegram-alert[action="Banido por <bantime> segundos", msg="Muitos acessos com erro 4xx"]
         logger[msg="Muitos acessos com erro 4xx"]
 
 [sshd]
