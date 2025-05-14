@@ -6,6 +6,7 @@ from utils.certs_utils import (
     add_client_cert,
     get_client_p12_path,
     list_client_certs,
+    get_certs_logs
 )
 import subprocess
 
@@ -22,8 +23,9 @@ def telegram_alert(ip, action, level, msg=""):
 def dashboard():
     fail2ban_logs = get_fail2ban_logs()
     nginx_logs = get_dict_logs()
+    certs_logs = get_certs_logs()
 
-    return render_template("dashboard.html", fail2ban_logs=fail2ban_logs, **nginx_logs)
+    return render_template("dashboard.html", fail2ban_logs=fail2ban_logs, **nginx_logs, certs_logs=certs_logs)
 
 
 @app.route("/configurar", methods=["GET", "POST"])
