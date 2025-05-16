@@ -21,12 +21,35 @@ services:
     cap_add:
       - NET_ADMIN
 
-  sistema:
-    build: ../sistema-clinica/
-    expose:
-      - "5000"
+  openemr:
+    image: openemr/openemr:latest
     networks:
       - clinica-net
+    volumes:
+      - openemr-data:/var/www/localhost/htdocs/openemr
+    environment:
+      - MYSQL_HOST=db-openemr
+      - MYSQL_USER=openemr
+      - MYSQL_PASSWORD=openemr
+      - MYSQL_DATABASE=openemr
+    depends_on:
+      - db-openemr
+
+  db-openemr:
+    image: mariadb:10.6
+    environment:
+      - MYSQL_ROOT_PASSWORD=senhasegura
+      - MYSQL_DATABASE=openemr
+      - MYSQL_USER=openemr
+      - MYSQL_PASSWORD=openemr
+    volumes:
+      - db-openemr-data:/var/lib/mysql
+    networks:
+      - clinica-net
+
+volumes:
+  openemr-data:
+  db-openemr-data:
 
 networks:
   clinica-net:
