@@ -26,7 +26,7 @@ location {path} {{
         return 403;
     }}
 
-    proxy_pass http://sistema:5000;
+    proxy_pass http://openemr:80;
 }}
 """
 
