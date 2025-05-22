@@ -147,8 +147,36 @@
           </tbody>
         </table>
       </div>
-  </div>
-  {% endblock %}
+    </div>
+
+    <!-- Seção de Regras NAXSI -->
+    <div class="card">
+      <div class="card-header bg-purple text-white d-flex justify-content-between align-items-center">
+        <span><i class="bi bi-shield-exclamation"></i> Regras NAXSI</span>
+        <div class="d-flex gap-2">
+          <button onclick="fetchCurrentRules()" class="btn btn-outline-info btn-sm">
+            <i class="bi bi-eye"></i> Ver Regras Atuais
+          </button>
+          <button onclick="fetchOptimizedRules()" class="btn btn-outline-warning btn-sm">
+            <i class="bi bi-lightbulb"></i> Gerar Regras Otimizadas
+          </button>
+          <button onclick="saveOptimizedRules()" class="btn btn-success btn-sm">
+            <i class="bi bi-save"></i> Salvar Regras
+          </button>
+        </div>
+      </div>
+      <div class="card-body">
+        <h6 class="text-white">Regras Atuais</h6>
+        <pre id="currentRules" class="bg-dark text-white p-3 rounded"
+          style="white-space: pre-wrap;"></pre>
+
+        <h6 class="text-white mt-4">Regras Otimizadas</h6>
+        <pre id="optimizedRules" class="bg-dark text-white p-3 rounded"
+          style="white-space: pre-wrap;"></pre>
+      </div>
+    </div>
+
+    {% endblock %}
 
   </div>
 
@@ -231,6 +259,40 @@
       window.location.href = `/certificados/download/${encodeURIComponent(name)}`;
     }
   </script>
+
+  <script>
+    async function fetchCurrentRules() {
+      const res = await fetch("/naxsi/current-rules");
+      if (res.ok) {
+        const data = await res.json();
+        document.getElementById("currentRules").textContent = data.rules.join("\n");
+      } else {
+        alert("Erro ao carregar regras atuais.");
+      }
+    }
+
+    async function fetchOptimizedRules() {
+      const res = await fetch("/naxsi/optimized-rules");
+      if (res.ok) {
+        const data = await res.json();
+        document.getElementById("optimizedRules").textContent = data.rules.join("\n");
+      } else {
+        alert("Erro ao gerar regras otimizadas.");
+      }
+    }
+
+    async function saveOptimizedRules() {
+      const res = await fetch("/naxsi/save-rules", { method: "POST" });
+      if (res.ok) {
+        alert("Regras salvas com sucesso.");
+        fetchCurrentRules();
+        location.reload();
+      } else {
+        alert("Erro ao salvar regras.");
+      }
+    }
+  </script>
+
 
 </body>
 
