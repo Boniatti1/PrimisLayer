@@ -18,6 +18,8 @@ services:
       - ./data/logs/certs.log:/var/log/certs.log
       # SSL
       - ./data/ssl:/etc/ssl/server
+      # NAXSI
+      - ./data/naxsi/generated.wl:/etc/nginx/generated.wl
     cap_add:
       - NET_ADMIN
 

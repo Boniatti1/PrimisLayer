@@ -8,7 +8,8 @@ RUN apk add --no-cache \
     fail2ban \
     nginx-mod-http-naxsi \
     openssl \
-    tzdata
+    tzdata \
+    git
 
 ENV TZ=America/Sao_Paulo
 
@@ -32,6 +33,10 @@ COPY scripts/.env /etc/scripts/.env
 COPY dashboard/ /dashboard/
 
 COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+RUN git clone https://github.com/Boniatti1/nxutil.git /opt/nxutil
+RUN mkdir -p /usr/local/etc
+RUN cp /opt/nxutil/nx_util.conf /usr/local/etc/nx_util.conf
 
 EXPOSE 80 443 5000
 

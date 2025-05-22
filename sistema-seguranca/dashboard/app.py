@@ -8,6 +8,7 @@ from utils.certs_utils import (
     list_client_certs,
     get_certs_logs
 )
+from utils.naxsi_utils import get_naxsi_whitelist, get_optimized_rules, save_optimized_rules
 import subprocess
 
 app = Flask(__name__)
@@ -102,6 +103,30 @@ def download_p12(name):
         abort(404, description=str(e))
     except Exception as e:
         abort(500, description=f"Erro interno: {str(e)}")
+
+
+# Rotas para o NAXSI
+
+
+@app.route("/naxsi/optimized-rules")
+def optimized_naxsi_rules():
+    rules = get_optimized_rules()
+    return jsonify({"rules": rules})
+
+
+@app.post("/naxsi/save-rules")
+def save_naxsi_whitelist():
+    try:
+        save_optimized_rules()
+        return "", 200
+    except Exception as e:
+        abort(500, description=f"Erro interno: {str(e)}")
+
+
+@app.route("/naxsi/current-rules")
+def current_naxsi_whitelist():
+    rules = get_naxsi_whitelist()
+    return jsonify({"rules": rules})
 
 
 if __name__ == "__main__":

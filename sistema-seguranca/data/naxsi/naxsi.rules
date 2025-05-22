@@ -6,3 +6,5 @@ CheckRule "$RFI >= 16" BLOCK;
 CheckRule "$TRAVERSAL >= 8" BLOCK;
 CheckRule "$EVADE >= 8" BLOCK;
 CheckRule "$XSS >= 20" BLOCK;
+
+include /etc/nginx/generated.wl;
