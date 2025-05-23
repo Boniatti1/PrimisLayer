@@ -23,6 +23,7 @@ Foi criado um sistema de segurança baseado em proxy reverso que intercepta, ana
 - **Docker**: Isolamento e portabilidade do ambiente.
 - **NGINX**: Servidor web e proxy reverso.
 - **NAXSI**: Firewall de aplicações web (WAF).
+- **nxutil**: Sugestão de whitelist para o NAXSI.
 - **Fail2ban**: Detecção de comportamentos suspeitos e banimento de IPs.
 - **Flask**: Aplicação web para o painel administrativo.
 - **OpenSSL**: Emissão e revogação de certificados digitais.
