@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request, abort, send_file
 from utils.fail2ban_utils import get_fail2ban_logs
-from utils.nginx_utils import delete_location, add_location, list_locations, get_dict_logs, nginx_alive
+from utils.nginx_utils import delete_location, add_location, list_locations, get_dict_logs, nginx_alive, get_insights
 from utils.certs_utils import (
     delete_client_cert,
     add_client_cert,
@@ -25,8 +25,9 @@ def dashboard():
     fail2ban_logs = get_fail2ban_logs()
     nginx_logs = get_dict_logs()
     certs_logs = get_certs_logs()
+    insights = get_insights()
 
-    return render_template("dashboard.html", fail2ban_logs=fail2ban_logs, **nginx_logs, certs_logs=certs_logs)
+    return render_template("dashboard.html", fail2ban_logs=fail2ban_logs, **nginx_logs, certs_logs=certs_logs, insights=insights)
 
 
 @app.route("/configurar", methods=["GET", "POST"])

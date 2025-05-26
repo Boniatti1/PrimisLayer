@@ -166,3 +166,43 @@ def get_dict_logs():
         "protected_error": protected_error_logs,
         "server_errors": server_error_logs,
     }
+
+
+# Funções para gerar dados para os gráficos
+
+
+from datetime import datetime, timedelta, timezone
+from collections import Counter
+
+def generate_access_insights(logs):
+    time_ago = datetime.now(tz=timezone.utc) - timedelta(hours=24)
+    
+    hour_count = Counter()
+    ip_count = Counter()
+
+    for log in logs:
+        date = datetime.strptime(log["date"], "%d/%b/%Y:%H:%M:%S %z")
+        if date < time_ago:
+            break
+        date = date.strftime("%d/%m %H:00")
+        
+        ip_count[log["ip"]] += 1
+        hour_count[date] += 1
+
+    hour_labels, hour_values = zip(*sorted(hour_count.items(), key=lambda x: x[0]))
+    ip_labels, ip_values = zip(*sorted(ip_count.items(), key=lambda x: x[0]))
+    
+    return {
+        "hourly_access": {"labels": list(hour_labels), "values": list(hour_values)},
+        "ip_access": {"labels": list(ip_labels), "values": list(ip_values)},
+    }
+
+
+def get_insights():
+    normal_logs = [parse_nginx_access(line) for line in tail_log_file(NGINX_NORMAL_ACCESS, lines=9999)]
+    protected_logs = [parse_nginx_access(line) for line in tail_log_file(NGINX_PROTECTED_ACCESS, lines=9999)]
+    
+    normal = generate_access_insights(normal_logs)
+    protected = generate_access_insights(protected_logs)
+    
+    return {"normal": normal, "protected": protected}

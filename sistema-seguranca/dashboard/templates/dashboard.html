@@ -43,248 +43,340 @@
 </head>
 <body>
 
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark">
-  <div class="container-fluid">
-    <div class="logo-container">
-      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo-img", height="50px">
-       <!-- <img src="../static/images/logo.png" alt="Logo" class="logo-img", height="50px"> -->
-      <a class="navbar-brand" href="{{ url_for('dashboard') }}" style="margin-left: 5px;">Acessos</a>
-    </div>
-    <div class="d-flex ms-auto">
-      <a href="{{ url_for('manage_config') }}" class="btn btn-outline-light">
-        <i class="bi bi-gear"></i> Gerenciar Rotas
-      </a>
-    </div>
-  </div>
-</nav>
-
-<!-- Conteúdo Principal -->
-<div class="container py-4">
-
-  <!-- Acessos Normais -->
-  <div class="card">
-    <div class="card-header" style="background-color: #2a3f54; color: white;">
-      <i class="bi bi-door-open"></i> Acessos Normais (Últimos {{ normal_access|length }})
-    </div>
-    <div class="card-body p-2">
-      <div class="table-responsive log-table">
-        <table class="table table-dark table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>IP</th>
-              <th>Data/Hora</th>
-              <th>Método</th>
-              <th>URL</th>
-              <th>Status</th>
-              <th>User Agent</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for log in normal_access %}
-            <tr>
-              <td>{{ log.ip }}</td>
-              <td>{{ log.date }}</td>
-              <td>{{ log.method }}</td>
-              <td>{{ log.url }}</td>
-              <td><span class="badge bg-{{ 'danger' if log.is_error else 'success' }}">{{ log.status }}</span></td>
-              <td>{{ log.user_agent }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+  <!-- Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container-fluid">
+      <div class="logo-container">
+        <img src="{{ url_for('static', filename='images/logo.png') }}" alt="Logo" class="logo-img", height="50px">
+        <!-- <img src="../static/images/logo.png" alt="Logo" class="logo-img", height="50px"> -->
+        <a class="navbar-brand" href="{{ url_for('dashboard') }}" style="margin-left: 5px;">Acessos</a>
+      </div>
+      <div class="d-flex ms-auto">
+        <a href="{{ url_for('manage_config') }}" class="btn btn-outline-light">
+          <i class="bi bi-gear"></i> Gerenciar Rotas
+        </a>
       </div>
     </div>
-  </div>
+  </nav>
 
-  <!-- Erros em Rotas Normais -->
-  <div class="card">
-    <div class="card-header" style="background-color: #5a4a42; color: white;">
-      <i class="bi bi-exclamation-triangle"></i> Erros em Rotas Normais (Últimos {{ normal_errors|length }})
-    </div>
-    <div class="card-body p-2">
-      <div class="table-responsive log-table">
-        <table class="table table-dark table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>Data/Hora</th>
-              <th>Tipo</th>
-              <th>PID</th>
-              <th>Mensagem</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for log in normal_errors %}
-            <tr>
-              <td>{{ log.date }}</td>
-              <td><span class="badge bg-{{ log.badge_class }}">{{ log.log_type }}</span></td>
-              <td>{{ log.pid }}</td>
-              <td>{{ log.message }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+  <!-- Conteúdo Principal -->
+  <div class="container py-4">
+    <!-- Seção de Gráficos -->
+    <div class="row mt-4">
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <i class="bi bi-clock"></i> Acessos por Hora (Normal)
+          </div>
+          <div class="card-body">
+            <div id="normal_graph_hourly"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-primary text-white">
+            <i class="bi bi-clock-history"></i> Acessos por Hora (Protegido)
+          </div>
+          <div class="card-body">
+            <div id="protected_graph_hourly"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-danger text-white">
+            <i class="bi bi-person-lines-fill"></i> IPs com Mais Acessos (Normal)
+          </div>
+          <div class="card-body">
+            <div id="normal_graph_ips"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header bg-danger text-white">
+            <i class="bi bi-person-fill-lock"></i> IPs com Mais Acessos (Protegido)
+          </div>
+          <div class="card-body">
+            <div id="protected_graph_ips"></div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Acessos Protegidos -->
-  <div class="card">
-    <div class="card-header" style="background-color: #3a5169; color: white;">
-      <i class="bi bi-shield-lock"></i> Acessos a Rotas Protegidas (Últimos {{ protected_access|length }})
-    </div>
-    <div class="card-body p-2">
-      <div class="table-responsive log-table">
-        <table class="table table-dark table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>IP</th>
-              <th>Data/Hora</th>
-              <th>Método</th>
-              <th>URL</th>
-              <th>Status</th>
-              <th>User Agent</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for log in protected_access %}
-            <tr>
-              <td>{{ log.ip }}</td>
-              <td>{{ log.date }}</td>
-              <td>{{ log.method }}</td>
-              <td>{{ log.url }}</td>
-              <td><span class="badge bg-{{ 'danger' if log.is_error else 'success' }}">{{ log.status }}</span></td>
-              <td>{{ log.user_agent }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <!-- Acessos Normais -->
+    <div class="card">
+      <div class="card-header" style="background-color: #2a3f54; color: white;">
+        <i class="bi bi-door-open"></i> Acessos Normais (Últimos {{ normal_access|length }})
+      </div>
+      <div class="card-body p-2">
+        <div class="table-responsive log-table">
+          <table class="table table-dark table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>Data/Hora</th>
+                <th>Método</th>
+                <th>URL</th>
+                <th>Status</th>
+                <th>User Agent</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in normal_access %}
+              <tr>
+                <td>{{ log.ip }}</td>
+                <td>{{ log.date }}</td>
+                <td>{{ log.method }}</td>
+                <td>{{ log.url }}</td>
+                <td><span class="badge bg-{{ 'danger' if log.is_error else 'success' }}">{{ log.status }}</span></td>
+                <td>{{ log.user_agent }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Erros em Rotas Protegidas -->
-  <div class="card">
-    <div class="card-header" style="background-color: #9e1f1f; color: white;">
-      <i class="bi bi-shield-exclamation"></i> Erros em Rotas Protegidas (Últimos {{ protected_errors|length }})
-    </div>
-    <div class="card-body p-2">
-      <div class="table-responsive log-table">
-        <table class="table table-dark table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>Data/Hora</th>
-              <th>Tipo</th>
-              <th>PID</th>
-              <th>Mensagem</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for log in protected_errors %}
-            <tr>
-              <td>{{ log.date }}</td>
-              <td><span class="badge bg-{{ log.badge_class }}">{{ log.log_type }}</span></td>
-              <td>{{ log.pid }}</td>
-              <td>{{ log.message }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <!-- Erros em Rotas Normais -->
+    <div class="card">
+      <div class="card-header" style="background-color: #5a4a42; color: white;">
+        <i class="bi bi-exclamation-triangle"></i> Erros em Rotas Normais (Últimos {{ normal_errors|length }})
+      </div>
+      <div class="card-body p-2">
+        <div class="table-responsive log-table">
+          <table class="table table-dark table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>Data/Hora</th>
+                <th>Tipo</th>
+                <th>PID</th>
+                <th>Mensagem</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in normal_errors %}
+              <tr>
+                <td>{{ log.date }}</td>
+                <td><span class="badge bg-{{ log.badge_class }}">{{ log.log_type }}</span></td>
+                <td>{{ log.pid }}</td>
+                <td>{{ log.message }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Logs de Erro do Servidor -->
-  <div class="card">
-    <div class="card-header" style="background-color: #4a4a4a; color: white;">
-      <i class="bi bi-server"></i> Logs de Erro do Servidor (Últimos {{ server_errors|length }})
-    </div>
-    <div class="card-body p-2">
-      <div class="table-responsive log-table">
-        <table class="table table-dark table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>Data/Hora</th>
-              <th>Tipo</th>
-              <th>PID</th>
-              <th>Mensagem</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for log in server_errors %}
-            <tr>
-              <td>{{ log.date }}</td>
-              <td><span class="badge bg-{{ log.badge_class }}">{{ log.log_type }}</span></td>
-              <td>{{ log.pid }}</td>
-              <td>{{ log.message }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <!-- Acessos Protegidos -->
+    <div class="card">
+      <div class="card-header" style="background-color: #3a5169; color: white;">
+        <i class="bi bi-shield-lock"></i> Acessos a Rotas Protegidas (Últimos {{ protected_access|length }})
+      </div>
+      <div class="card-body p-2">
+        <div class="table-responsive log-table">
+          <table class="table table-dark table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>IP</th>
+                <th>Data/Hora</th>
+                <th>Método</th>
+                <th>URL</th>
+                <th>Status</th>
+                <th>User Agent</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in protected_access %}
+              <tr>
+                <td>{{ log.ip }}</td>
+                <td>{{ log.date }}</td>
+                <td>{{ log.method }}</td>
+                <td>{{ log.url }}</td>
+                <td><span class="badge bg-{{ 'danger' if log.is_error else 'success' }}">{{ log.status }}</span></td>
+                <td>{{ log.user_agent }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Logs do Fail2ban -->
-  <div class="card">
-    <div class="card-header" style="background-color: #3a5a6a; color: white;">
-      <i class="bi bi-shield-x"></i> Ações do Fail2Ban (Últimos {{ fail2ban_logs|length }})
-    </div>
-    <div class="card-body p-2">
-      <div class="table-responsive log-table">
-        <table class="table table-dark table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>Data/Hora</th>
-              <th>Falhas</th>
-              <th>IP</th>
-              <th>Serviço</th>
-              <th>Mensagem</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for log in fail2ban_logs %}
-            <tr>
-              <td>{{ log.time }}</td>
-              <td><span class="badge bg-warning text-dark">{{ log.failures }}</span></td>
-              <td>{{ log.ip }}</td>
-              <td>{{ log.name }}</td>
-              <td>{{ log.msg }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <!-- Erros em Rotas Protegidas -->
+    <div class="card">
+      <div class="card-header" style="background-color: #9e1f1f; color: white;">
+        <i class="bi bi-shield-exclamation"></i> Erros em Rotas Protegidas (Últimos {{ protected_errors|length }})
+      </div>
+      <div class="card-body p-2">
+        <div class="table-responsive log-table">
+          <table class="table table-dark table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>Data/Hora</th>
+                <th>Tipo</th>
+                <th>PID</th>
+                <th>Mensagem</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in protected_errors %}
+              <tr>
+                <td>{{ log.date }}</td>
+                <td><span class="badge bg-{{ log.badge_class }}">{{ log.log_type }}</span></td>
+                <td>{{ log.pid }}</td>
+                <td>{{ log.message }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Logs de Certificados -->
-  <div class="card">
-    <div class="card-header" style="background-color: #4a5a3a; color: white;">
-      <i class="bi bi-lock"></i> Gerenciamento de Certificados (Últimos {{ certs_logs|length }})
-    </div>
-    <div class="card-body p-2">
-      <div class="table-responsive log-table">
-        <table class="table table-dark table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>Mensagem</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for log in certs_logs %}
-            <tr>
-              <td>{{ log }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+    <!-- Logs de Erro do Servidor -->
+    <div class="card">
+      <div class="card-header" style="background-color: #4a4a4a; color: white;">
+        <i class="bi bi-server"></i> Logs de Erro do Servidor (Últimos {{ server_errors|length }})
+      </div>
+      <div class="card-body p-2">
+        <div class="table-responsive log-table">
+          <table class="table table-dark table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>Data/Hora</th>
+                <th>Tipo</th>
+                <th>PID</th>
+                <th>Mensagem</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in server_errors %}
+              <tr>
+                <td>{{ log.date }}</td>
+                <td><span class="badge bg-{{ log.badge_class }}">{{ log.log_type }}</span></td>
+                <td>{{ log.pid }}</td>
+                <td>{{ log.message }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
+
+    <!-- Logs do Fail2ban -->
+    <div class="card">
+      <div class="card-header" style="background-color: #3a5a6a; color: white;">
+        <i class="bi bi-shield-x"></i> Ações do Fail2Ban (Últimos {{ fail2ban_logs|length }})
+      </div>
+      <div class="card-body p-2">
+        <div class="table-responsive log-table">
+          <table class="table table-dark table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>Data/Hora</th>
+                <th>Falhas</th>
+                <th>IP</th>
+                <th>Serviço</th>
+                <th>Mensagem</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in fail2ban_logs %}
+              <tr>
+                <td>{{ log.time }}</td>
+                <td><span class="badge bg-warning text-dark">{{ log.failures }}</span></td>
+                <td>{{ log.ip }}</td>
+                <td>{{ log.name }}</td>
+                <td>{{ log.msg }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Logs de Certificados -->
+    <div class="card">
+      <div class="card-header" style="background-color: #4a5a3a; color: white;">
+        <i class="bi bi-lock"></i> Gerenciamento de Certificados (Últimos {{ certs_logs|length }})
+      </div>
+      <div class="card-body p-2">
+        <div class="table-responsive log-table">
+          <table class="table table-dark table-hover table-bordered">
+            <thead>
+              <tr>
+                <th>Mensagem</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for log in certs_logs %}
+              <tr>
+                <td>{{ log }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-</div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script>
+    const insights = JSON.parse(`{{ insights | tojson | safe }}`);
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    const darkLayout = {
+      paper_bgcolor: '#121212',
+      plot_bgcolor: '#121212',
+      font: { color: '#e0e0e0' },
+      xaxis: {
+        tickfont: { color: '#cccccc' },
+        gridcolor: '#2a2a2a',
+        zerolinecolor: '#2a2a2a',
+      },
+      yaxis: {
+        tickfont: { color: '#cccccc' },
+        gridcolor: '#2a2a2a',
+        zerolinecolor: '#2a2a2a',
+      },
+      margin: { t: 30, b: 80, l: 50, r: 20 },
+    };
+
+    Plotly.newPlot("normal_graph_hourly", [{
+      x: insights.normal.hourly_access.labels,
+      y: insights.normal.hourly_access.values,
+      type: 'bar',
+      marker: { color: '#17a2b8' }
+    }], darkLayout);
+
+    Plotly.newPlot("protected_graph_hourly", [{
+      x: insights.protected.hourly_access.labels,
+      y: insights.protected.hourly_access.values,
+      type: 'bar',
+      marker: { color: '#6610f2' }
+    }], darkLayout);
+
+    Plotly.newPlot("normal_graph_ips", [{
+      x: insights.normal.ip_access.labels,
+      y: insights.normal.ip_access.values,
+      type: 'bar',
+      marker: { color: '#dc3545' }
+    }], darkLayout);
+
+    Plotly.newPlot("protected_graph_ips", [{
+      x: insights.protected.ip_access.labels,
+      y: insights.protected.ip_access.values,
+      type: 'bar',
+      marker: { color: '#6f42c1' }
+    }], darkLayout);
+  </script>
 </body>
 </html>
