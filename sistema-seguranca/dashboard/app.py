@@ -1,6 +1,6 @@
 from flask import Flask, render_template, jsonify, request, abort, send_file
 from utils.fail2ban_utils import get_fail2ban_logs
-from utils.nginx_utils import delete_location, add_location, list_locations, get_dict_logs
+from utils.nginx_utils import delete_location, add_location, list_locations, get_dict_logs, nginx_alive
 from utils.certs_utils import (
     delete_client_cert,
     add_client_cert,
@@ -8,7 +8,7 @@ from utils.certs_utils import (
     list_client_certs,
     get_certs_logs
 )
-from utils.naxsi_utils import get_naxsi_whitelist, get_optimized_rules, save_optimized_rules
+from utils.naxsi_utils import get_naxsi_whitelist, get_optimized_rules, save_optimized_rules, activate_learning_mode, deactivate_learning_mode, learning_mode_active
 import subprocess
 
 app = Flask(__name__)
@@ -33,8 +33,10 @@ def dashboard():
 def manage_config():
     routes = list_locations()
     certs = list_client_certs()
+    nginx_active = nginx_alive()
+    learning_mode = learning_mode_active()
 
-    return render_template("config.html", routes=routes, certs=certs)
+    return render_template("config.html", routes=routes, certs=certs, nginx_active=nginx_active, learning_mode=learning_mode)
 
 
 # Rotas para gerenciar as rotas protegidas
@@ -118,6 +120,7 @@ def optimized_naxsi_rules():
 def save_naxsi_whitelist():
     try:
         save_optimized_rules()
+        telegram_alert(request.remote_addr, "Novas regras NAXSI foram geradas e aplicadas", "Alta")
         return "", 200
     except Exception as e:
         abort(500, description=f"Erro interno: {str(e)}")
@@ -127,6 +130,49 @@ def save_naxsi_whitelist():
 def current_naxsi_whitelist():
     rules = get_naxsi_whitelist()
     return jsonify({"rules": rules})
+
+
+# Configurações do servidor
+
+
+@app.route('/config/desligar-nginx', methods=['POST'])
+def shutdown_nginx():
+    try:
+        result = subprocess.run(['supervisorctl', 'stop', 'nginx'], check=True, capture_output=True, text=True)
+        telegram_alert(request.remote_addr, "O servidor foi desligado por painel", "Média")
+        return "", 200
+    except subprocess.CalledProcessError as e:
+        return jsonify({'error': e.stderr.strip()}), 500
+
+
+@app.route('/config/ligar-nginx', methods=['POST'])
+def turn_on_nginx():
+    try:
+        result = subprocess.run(['supervisorctl', 'start', 'nginx'], check=True, capture_output=True, text=True)
+        telegram_alert(request.remote_addr, "O servidor foi ativado por painel", "Média")
+        return "", 200
+    except subprocess.CalledProcessError as e:
+        return jsonify({'error': e.stderr.strip()}), 500
+
+
+@app.route('/config/ativar-aprendizado', methods=["POST"])
+def naxsi_activate_learning_mode():
+    try:
+        activate_learning_mode()
+        telegram_alert(request.remote_addr, "Modo aprendizado NAXSI ativado", "Crítica")
+        return "", 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/config/desativar-aprendizado', methods=["POST"])
+def naxsi_deactivate_learning_mode():
+    try:
+        deactivate_learning_mode()
+        telegram_alert(request.remote_addr, "Modo aprendizado NAXSI ativado", "Média")
+        return "", 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 if __name__ == "__main__":

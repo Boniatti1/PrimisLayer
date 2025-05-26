@@ -20,6 +20,7 @@ services:
       - ./data/ssl:/etc/ssl/server
       # NAXSI
       - ./data/naxsi/generated.wl:/etc/nginx/generated.wl
+      - ./data/naxsi/naxsi.rules:/etc/nginx/naxsi.rules
     cap_add:
       - NET_ADMIN
 

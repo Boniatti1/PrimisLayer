@@ -41,6 +41,17 @@ def reload_nginx():
     )
 
 
+def nginx_alive():
+    result = subprocess.run(
+        ['supervisorctl', 'status', 'nginx'], 
+        capture_output=True, 
+        text=True,
+    )
+    alive = True if 'RUNNING' in result.stdout else False
+    
+    return alive
+
+
 # Funções para gerenciar as rotas protegidas
 
 
