@@ -1,4 +1,4 @@
-# Sistema de Segurança
+![Logo do projeto](docs/images/logo.png)
 
 Solução desenvolvida como parte do Programa Talento Tech na Disciplina 15 - Projeto Integrador.
 
@@ -8,7 +8,7 @@ Desenvolver um sistema automatizado para detecção e resposta a ameaças cibern
 
 ## Solução Desenvolvida
 
-Foi criado um sistema de segurança baseado em proxy reverso que intercepta, analisa e responde a possíveis ameaças. A solução oferece:
+Foi criado o PrimisLayer: um sistema de segurança baseado em proxy reverso que intercepta, analisa e responde a possíveis ameaças. A solução oferece:
 
 - Monitoramento de Logs de acesso.
 - Bloqueio automático de IPs suspeitos com fail2ban.
